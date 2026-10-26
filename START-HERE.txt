@@ -1,0 +1,111 @@
+DEPLOYMENT FIX — 21 OCTOBER 2026
+Select Framework: Other (not Node). The included vercel.json now enforces this.
+Upload the entire extracted package root: api/, lib/, public/, package.json and vercel.json must be together. Output Directory: public. No build command is needed.
+This fixes the unused_function configuration mismatch; a live Vercel build has not been verified.
+
+FLEXIAUTOMATIONS — BY SARTHAK
+UPDATE NOTES
+- Complete HTML: public/index.html (also public/FlexiAutomations.html).
+- Deploy the entire package, including api/, to Vercel. HTML alone previews the design but cannot securely dispatch GitHub workflows.
+- Discrepancy repo: Sarthak-B/flexifunnels-discrepancy-tracker. The server discovers its active workflow named Discrepancy. If multiple matches exist, set DISCREPANCY_WORKFLOW to its filename (e.g. test.yml).
+- Forms read the current workflow YAML from the selected/default branch. Choice options, labels, required fields and defaults match GitHub. No screenshot-based fields are hardcoded.
+- GitHub token needs Actions read/write AND Contents read for BOTH repositories.
+- ALLOWED_REPOSITORIES: Sarthak-B/aisensy-broadcast-tracker,Sarthak-B/flexifunnels-discrepancy-tracker
+- Five unique recent values per field are saved after an accepted run in this browser's local storage. Refresh keeps them. They are not shared between devices and clearing browser data removes them. Use Clear recent entries in the form to remove them.
+- The old Redis registry namespace is retained so existing registered automations are preserved.
+- No live workflow has been triggered or deployment tested during packaging.
+
+SARTHAKAUTOKLERK — COMPLETE WEBSITE PACKAGE
+Owned and managed by Sarthak
+
+WHAT YOU HAVE
+- public/index.html: full self-contained website, with styles, fonts, icons and JavaScript.
+- public/FlexiAutomations.html: downloadable copy of the same HTML.
+- api/bridge.js: secure Node.js server for real GitHub activity and workflow dispatch.
+- source/: editable React frontend and its rebuild script.
+- vercel.json: Vercel deployment configuration.
+- .env.example: names of required server settings, with NO secret values.
+- server.mjs: optional local Node.js server.
+- tests/: automated server tests with mocked GitHub/Redis responses.
+
+THIS PACKAGE DOES NOT EMBED CHATGPT AND DOES NOT REQUIRE CHATGPT LOGIN.
+It uses a shared team access code checked by your server on every API request.
+The access code lives only in browser memory while the page is open. Reloading locks it.
+GitHub credentials never enter the HTML or browser.
+
+DEPLOY USING ONLY YOUR BROWSER
+1. Extract the ZIP.
+2. Create a PRIVATE GitHub repository under your own GitHub account named flexiautomations.
+3. Upload the CONTENTS of this folder to its root. Include api/, public/, source/,
+   package.json, server.mjs and vercel.json. Do not upload actual secrets.
+4. In Vercel, Add New > Project, import that GitHub repository.
+5. Select your own workspace. Vercel calls your personal project workspace a "team";
+   this does not invite anyone or transfer ownership.
+6. Framework Preset: Other. Output Directory: public. No build command is required;
+   the complete HTML is already built. Node.js 22 or newer.
+7. Add a persistent Upstash Redis database through Vercel Storage / Marketplace,
+   or use your own Upstash database. Check its pricing before enabling a paid plan.
+   Add its REST URL and REST TOKEN to the server variables listed below.
+   Redis stores your automation registry, shared run cooldowns and failed-login counts.
+8. Add all required environment variables in Vercel project settings. Mark secrets sensitive.
+9. Deploy. Open your own Vercel URL and enter the team access code you chose.
+10. Check Connections and Activity. Trigger one run only when you want the existing
+    AiSensy workflow to execute. Keep that workflow's existing AiSensy and Google
+    secrets in the original GitHub repository; this website does not replace them.
+
+REQUIRED SERVER VARIABLES
+TEAM_ACCESS_CODE
+  Choose a strong, unique random code of at least 16 characters. Share privately.
+GITHUB_TOKEN
+  Fine-grained GitHub token for your automation repositories; Actions read/write.
+UPSTASH_REDIS_REST_URL
+  HTTPS REST endpoint for your persistent Upstash Redis database.
+UPSTASH_REDIS_REST_TOKEN
+  Upstash REST read/write token, not the read-only token.
+ALLOWED_REPOSITORIES
+  Comma-separated allowed repositories. Default:
+  Sarthak-B/aisensy-broadcast-tracker
+  Add future automation repositories here AND grant the GitHub token access.
+
+WORKING BEHAVIOR
+- AiSensy is pre-registered using workflow test.yml, repository default branch.
+- Add automation saves to Redis and is shared between browser sessions/deployments.
+- The server allows only owner-approved repositories; maximum 20 workflow cards.
+- Activity shows the latest five GitHub runs for each workflow, refreshed every 15
+  seconds while the page is visible. No simulated success or made-up metrics.
+- A shared two-minute cooldown blocks repeated or concurrent button requests.
+- The server also checks for an active GitHub run before dispatching.
+- Preview the flow is a labelled visual demo; it never dispatches a workflow.
+- The underlying AiSensy script still controls fetching, sorting and Sheets updates.
+- Workflows must support workflow_dispatch and have defaults for required inputs.
+- Existing schedules remain in GitHub; this website adds manual run controls.
+
+IMPORTANT LIMITS
+- Uploading only HTML to FlexiFunnels or a static host will show the interface but
+  cannot run secure workflows. Deploy the included Node server as well.
+- No secrets, browser sessions, live Redis records or production database exports are
+  included. The prior ChatGPT site's custom workflow registrations are not migrated.
+- The previous GitHub permission error will persist until token access is corrected.
+- The shared code authorizes every holder to view activity, add approved workflows,
+  and run them. It does not provide per-person audit or role-based controls.
+- The shared lock prevents duplicate requests through this app. For a strict guarantee
+  against simultaneous external/scheduled runs, configure a concurrency group in each
+  GitHub workflow too. No existing workflow is modified by this package.
+- API logic was tested locally with mocked services. No live deployment or actual
+  GitHub workflow run was performed as part of creating this ZIP.
+
+EDITING THE DESIGN (OPTIONAL)
+The source/frontend folder includes Home.tsx, catalog.ts, entry.tsx and styles.css.
+For developers: install source/package.json dependencies, then from the website root
+run `node source/build.mjs`. Upload the rebuilt public files. No build is needed to
+publish the supplied version. The root package has no third-party runtime dependencies.
+
+LOCAL DEVELOPER TESTING (OPTIONAL)
+Node.js 22+; set the same server variables privately.
+Run `node --env-file=.env server.mjs`, then visit http://localhost:3000.
+Run `node --test tests/*.test.mjs` for the mocked backend checks.
+
+DOCUMENTATION
+https://vercel.com/docs/functions/runtimes/node-js
+https://upstash.com/docs/redis/features/restapi
+https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event
