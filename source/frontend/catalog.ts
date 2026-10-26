@@ -6,3 +6,7 @@ export const aisensy: Automation = {
 export const sheetUrl='https://docs.google.com/spreadsheets/d/1jXnQPQngi-FbEBBHC0tvaOTXxmtE5_miv6Mq0rTbmLQ/edit';
 
 export const discrepancy:Automation={id:"discrepancy",name:"Discrepancy tracker",description:"Compare UTM, FlexiFunnels and Zoom registrations with your selected report inputs.",repository:"Sarthak-B/flexifunnels-discrepancy-tracker",workflow:"",branch:"",category:"Reporting"};
+
+// Google Sheets written by the Discrepancy tracker workflow (repo variables RAW_DATA_SHEET_ID and DISCREPANCY_SHEET_ID).
+export const discrepancySheetUrl='https://docs.google.com/spreadsheets/d/1W-DvMLMF-o6UIhZrMGbAdqX3dRGK0HovLWLly4jshtg/edit';
+export const discrepancyStatsUrl='https://docs.google.com/spreadsheets/d/1tYZt1uzlcXqsoh6MGFqPT5cPthQ4DpyHQbwE-mytL-0/edit';
